@@ -23,10 +23,10 @@ namespace RestAppUdemy
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration["MySqlConnection:MySqlConnectionString"];
-
             services.AddDbContext<MySQLContext>(options => options.UseMySql(connection));
+            services.AddMvc(); /*.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);*/
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddApiVersioning();
 
             services.AddScoped<IPersonService, PersonServiceImpl>();
         }

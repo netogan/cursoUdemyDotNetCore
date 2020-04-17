@@ -4,8 +4,8 @@ using RestAppUdemy.Services;
 
 namespace RestAppUdemy.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [ApiVersion("1")]
+    [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonsController : ControllerBase
     {
         private IPersonService _personService;
@@ -19,7 +19,9 @@ namespace RestAppUdemy.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_personService.FindAll());
+            var res = _personService.FindAll();
+
+            return Ok(res);
         }
 
         // GET api/values/5
