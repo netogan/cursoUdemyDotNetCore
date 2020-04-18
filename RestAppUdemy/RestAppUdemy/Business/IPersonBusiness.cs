@@ -1,9 +1,9 @@
 ﻿using RestAppUdemy.Model;
 using System.Collections.Generic;
 
-namespace RestAppUdemy.Services
+namespace RestAppUdemy.Business
 {
-    public interface IPersonService
+    public interface IPersonBusiness
     {
         Person Create(Person person);
         Person FindById(long id);

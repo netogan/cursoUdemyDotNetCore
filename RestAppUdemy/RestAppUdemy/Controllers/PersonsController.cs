@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestAppUdemy.Model;
-using RestAppUdemy.Services;
+using RestAppUdemy.Business;
 
 namespace RestAppUdemy.Controllers
 {
@@ -8,18 +8,18 @@ namespace RestAppUdemy.Controllers
     [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonsController : ControllerBase
     {
-        private IPersonService _personService;
+        private IPersonBusiness _personBusiness;
 
-        public PersonsController(IPersonService personService)
+        public PersonsController(IPersonBusiness personBusiness)
         {
-            _personService = personService;
+            _personBusiness = personBusiness;
         }
 
         // GET api/values
         [HttpGet]
         public IActionResult Get()
         {
-            var res = _personService.FindAll();
+            var res = _personBusiness.FindAll();
 
             return Ok(res);
         }
@@ -28,7 +28,7 @@ namespace RestAppUdemy.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {
-            var person = _personService.FindById(id);
+            var person = _personBusiness.FindById(id);
 
             if (person == null)
                 return NotFound();
@@ -43,7 +43,7 @@ namespace RestAppUdemy.Controllers
             if (person == null)
                 return BadRequest();
 
-            return new ObjectResult(_personService.Create(person));
+            return new ObjectResult(_personBusiness.Create(person));
         }
 
         // PUT api/values/5
@@ -53,14 +53,19 @@ namespace RestAppUdemy.Controllers
             if (person == null)
                 return BadRequest();
 
-            return new ObjectResult(_personService.Update(person));
+            var personUpdate = _personBusiness.Update(person);
+
+            if (personUpdate == null)
+                return NoContent();
+
+            return new ObjectResult(personUpdate);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            _personService.Delete(id);
+            _personBusiness.Delete(id);
 
             return NoContent();
         }

@@ -5,13 +5,13 @@ using System.Threading;
 using RestAppUdemy.Model;
 using RestAppUdemy.Model.Context;
 
-namespace RestAppUdemy.Services.Implementations
+namespace RestAppUdemy.Repository.Implementations
 {
-    public class PersonServiceImpl : IPersonService
+    public class PersonRepositoryImpl : IPersonRepository
     {
         private MySQLContext _context;
 
-        public PersonServiceImpl(MySQLContext context)
+        public PersonRepositoryImpl(MySQLContext context)
         {
             _context = context;
         }
@@ -63,7 +63,7 @@ namespace RestAppUdemy.Services.Implementations
         public Person Update(Person person)
         {
             if (!Exist(person.Id))
-                return new Person();
+                return null;
 
             var res = _context.Persons.SingleOrDefault(p => p.Id == person.Id);
 
@@ -80,7 +80,7 @@ namespace RestAppUdemy.Services.Implementations
             return person;
         }
 
-        private bool Exist(long? id)
+        public bool Exist(long? id)
         {
             return _context.Persons.Any(p => p.Id == id);
         }

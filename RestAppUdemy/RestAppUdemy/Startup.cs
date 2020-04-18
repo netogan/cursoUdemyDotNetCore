@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RestAppUdemy.Model.Context;
-using RestAppUdemy.Services;
-using RestAppUdemy.Services.Implementations;
+using RestAppUdemy.Business;
+using RestAppUdemy.Business.Implementations;
+using RestAppUdemy.Repository;
+using RestAppUdemy.Repository.Implementations;
 
 namespace RestAppUdemy
 {
@@ -28,7 +30,8 @@ namespace RestAppUdemy
 
             services.AddApiVersioning();
 
-            services.AddScoped<IPersonService, PersonServiceImpl>();
+            services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
+            services.AddScoped<IPersonRepository, PersonRepositoryImpl>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
