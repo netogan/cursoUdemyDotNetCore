@@ -9,24 +9,54 @@ using RestAppUdemy.Business;
 using RestAppUdemy.Business.Implementations;
 using RestAppUdemy.Repository;
 using RestAppUdemy.Repository.Implementations;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace RestAppUdemy
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
 
-        public IConfiguration Configuration { get; }
+        private readonly ILogger _logger;
+        public IConfiguration _configuration { get; }
+        public IHostingEnvironment _environment { get; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment environment, ILogger<Startup> logger)
+        {
+            _configuration = configuration;
+            _environment = environment;
+            _logger = logger;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration["MySqlConnection:MySqlConnectionString"];
-            services.AddDbContext<MySQLContext>(options => options.UseMySql(connection));
-            services.AddMvc(); /*.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);*/
+            var connectionString = _configuration["MySqlConnection:MySqlConnectionString"];
+            services.AddDbContext<MySQLContext>(options => options.UseMySql(connectionString));
+
+            if (_environment.IsDevelopment())
+            {
+                try
+                {
+                    var evolveConnection = new MySql.Data.MySqlClient.MySqlConnection(connectionString);
+
+                    var evolve = new Evolve.Evolve("evolve.json", evolveConnection, msg => _logger.LogInformation(msg))
+                    {
+                        Locations = new List<string> { "db/migrations" },
+                        IsEraseDisabled = true
+                    };
+
+                    evolve.Migrate();
+
+                }
+                catch (System.Exception ex)
+                {
+                    _logger.LogCritical("Database migration failed.", ex);
+                    //throw ex;
+                }
+            }
+
+            services.AddMvc();
 
             services.AddApiVersioning();
 
