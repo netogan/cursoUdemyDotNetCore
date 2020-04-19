@@ -11,6 +11,7 @@ using RestAppUdemy.Repository;
 using RestAppUdemy.Repository.Implementations;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using RestAppUdemy.Repository.Generic;
 
 namespace RestAppUdemy
 {
@@ -61,7 +62,11 @@ namespace RestAppUdemy
             services.AddApiVersioning();
 
             services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
+            services.AddScoped<IBookBusiness, BookBusinessImpl>();
+
             services.AddScoped<IPersonRepository, PersonRepositoryImpl>();
+
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
