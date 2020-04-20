@@ -15,6 +15,8 @@ using RestAppUdemy.Repository.Generic;
 using Microsoft.Net.Http.Headers;
 using Tapioca.HATEOAS;
 using RestAppUdemy.Hypermedia;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace RestAppUdemy
 {
@@ -75,6 +77,14 @@ namespace RestAppUdemy
 
             services.AddApiVersioning();
 
+            var swaggerDocInfo = new Info() 
+            {
+                Title = "RESTFull API com ASP.NET Core 2.0",
+                Version = "v1"
+            };
+
+            services.AddSwaggerGen(s => s.SwaggerDoc("v1", swaggerDocInfo));
+
             services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
             services.AddScoped<IBookBusiness, BookBusinessImpl>();
 
@@ -97,7 +107,19 @@ namespace RestAppUdemy
             }
 
             app.UseHttpsRedirection();
-            
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(s => 
+            {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+            });
+
+            var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+
+            app.UseRewriter(option);
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "DefaultApi", template: "{controller=Values}/{id?}");
