@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RestAppUdemy.Model;
 using RestAppUdemy.Business;
+using RestAppUdemy.Data.VO;
 
 namespace RestAppUdemy.Controllers
 {
@@ -38,7 +38,7 @@ namespace RestAppUdemy.Controllers
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        public IActionResult Post([FromBody] PersonVO person)
         {
             if (person == null)
                 return BadRequest();
@@ -48,7 +48,7 @@ namespace RestAppUdemy.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Put([FromBody] Person person)
+        public IActionResult Put([FromBody] PersonVO person)
         {
             if (person == null)
                 return BadRequest();

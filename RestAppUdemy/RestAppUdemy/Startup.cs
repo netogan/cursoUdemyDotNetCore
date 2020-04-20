@@ -12,6 +12,7 @@ using RestAppUdemy.Repository.Implementations;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using RestAppUdemy.Repository.Generic;
+using Microsoft.Net.Http.Headers;
 
 namespace RestAppUdemy
 {
@@ -57,7 +58,13 @@ namespace RestAppUdemy
                 }
             }
 
-            services.AddMvc();
+            services.AddMvc(opt => 
+            {
+                opt.RespectBrowserAcceptHeader = true;
+                opt.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("text/xml"));
+                opt.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
+            })
+            .AddXmlSerializerFormatters();
 
             services.AddApiVersioning();
 

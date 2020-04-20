@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using RestAppUdemy.Data.Coonverters;
+using RestAppUdemy.Data.VO;
 using RestAppUdemy.Model;
 using RestAppUdemy.Repository;
 using RestAppUdemy.Repository.Generic;
@@ -9,14 +11,21 @@ namespace RestAppUdemy.Business.Implementations
     {
         private IRepository<Book> _repository;
 
+        private readonly BookConverter _converter;
+
         public BookBusinessImpl(IRepository<Book> repository)
         {
             _repository = repository;
+            _converter = new BookConverter();
         }
 
-        public Book Create(Book book)
+        public BookVO Create(BookVO book)
         {
-            return _repository.Create(book);
+            var bookEntity = _converter.Parse(book);
+
+            bookEntity = _repository.Create(bookEntity);
+
+            return _converter.Parse(bookEntity);
         }
 
         public void Delete(long id)
@@ -24,19 +33,23 @@ namespace RestAppUdemy.Business.Implementations
             _repository.Delete(id);
         }
 
-        public List<Book> FindAll()
+        public List<BookVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.ParseList(_repository.FindAll());
         }
 
-        public Book FindById(long id)
+        public BookVO FindById(long id)
         {
-            return _repository.FindById(id);
+            return _converter.Parse(_repository.FindById(id));
         }
 
-        public Book Update(Book book)
+        public BookVO Update(BookVO book)
         {
-            return _repository.Update(book);
+            var bookEntity = _converter.Parse(book);
+
+            bookEntity = _repository.Create(bookEntity);
+
+            return _converter.Parse(bookEntity);
         }
     }
 }
