@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestAppUdemy.Business;
 using RestAppUdemy.Data.VO;
+using Tapioca.HATEOAS;
 
 namespace RestAppUdemy.Controllers
 {
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
+    [TypeFilter(typeof(HyperMediaFilter))]
     public class PersonsController : ControllerBase
     {
         private IPersonBusiness _personBusiness;

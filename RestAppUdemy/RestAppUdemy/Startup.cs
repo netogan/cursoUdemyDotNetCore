@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using RestAppUdemy.Repository.Generic;
 using Microsoft.Net.Http.Headers;
+using Tapioca.HATEOAS;
+using RestAppUdemy.Hypermedia;
 
 namespace RestAppUdemy
 {
@@ -66,6 +68,11 @@ namespace RestAppUdemy
             })
             .AddXmlSerializerFormatters();
 
+            var filterOptions = new HyperMediaFilterOptions();
+
+            filterOptions.ObjectContentResponseEnricherList.Add(new PersonEnricher());
+            services.AddSingleton(filterOptions);
+
             services.AddApiVersioning();
 
             services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
@@ -90,7 +97,11 @@ namespace RestAppUdemy
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(name: "DefaultApi", template: "{controller=Values}/{id?}");
+            });
         }
     }
 }
