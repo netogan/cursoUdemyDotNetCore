@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Tapioca.HATEOAS;
 
 namespace RestAppUdemy.Data.VO

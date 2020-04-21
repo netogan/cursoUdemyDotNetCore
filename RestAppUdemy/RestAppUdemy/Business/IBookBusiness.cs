@@ -1,6 +1,7 @@
 ﻿using RestAppUdemy.Data.VO;
 using RestAppUdemy.Model;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RestAppUdemy.Business
 {
@@ -8,7 +9,7 @@ namespace RestAppUdemy.Business
     {
         BookVO Create(BookVO book);
         BookVO FindById(long id);
-        List<BookVO> FindAll();
+        Task<List<BookVO>> FindAll();
         BookVO Update(BookVO book);
         void Delete(long id);
     }

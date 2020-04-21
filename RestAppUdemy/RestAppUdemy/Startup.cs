@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,10 +12,10 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using RestAppUdemy.Repository.Generic;
 using Microsoft.Net.Http.Headers;
-using Tapioca.HATEOAS;
 using RestAppUdemy.Hypermedia;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Rewrite;
+using Tapioca.HATEOAS;
 
 namespace RestAppUdemy
 {
@@ -73,6 +72,7 @@ namespace RestAppUdemy
             var filterOptions = new HyperMediaFilterOptions();
 
             filterOptions.ObjectContentResponseEnricherList.Add(new PersonEnricher());
+            filterOptions.ObjectContentResponseEnricherList.Add(new BookEnricher());
             services.AddSingleton(filterOptions);
 
             services.AddApiVersioning();
