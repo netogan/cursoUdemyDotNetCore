@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestAppUdemy.Business;
 using RestAppUdemy.Data.VO;
+using System.Collections.Generic;
+using System.Net;
 using Tapioca.HATEOAS;
 
 namespace RestAppUdemy.Controllers
@@ -19,6 +21,10 @@ namespace RestAppUdemy.Controllers
 
         // GET api/values
         [HttpGet]
+        [ProducesResponseType(typeof(List<PersonVO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public IActionResult Get()
         {
             var res = _personBusiness.FindAll();
@@ -28,6 +34,10 @@ namespace RestAppUdemy.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(PersonVO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public IActionResult Get(long id)
         {
             var person = _personBusiness.FindById(id);
@@ -40,6 +50,9 @@ namespace RestAppUdemy.Controllers
 
         // POST api/values
         [HttpPost]
+        [ProducesResponseType(typeof(PersonVO), (int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public IActionResult Post([FromBody] PersonVO person)
         {
             if (person == null)
@@ -50,6 +63,9 @@ namespace RestAppUdemy.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(PersonVO), (int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public IActionResult Put([FromBody] PersonVO person)
         {
             if (person == null)
@@ -65,6 +81,9 @@ namespace RestAppUdemy.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public IActionResult Delete(long id)
         {
             _personBusiness.Delete(id);
