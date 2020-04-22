@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using RestAppUdemy.Data.Coonverters;
 using RestAppUdemy.Data.VO;
 using RestAppUdemy.Model;
-using RestAppUdemy.Repository;
 using RestAppUdemy.Repository.Generic;
 
 namespace RestAppUdemy.Business.Implementations
@@ -34,7 +32,7 @@ namespace RestAppUdemy.Business.Implementations
             _repository.Delete(id);
         }
 
-        public async Task<List<BookVO>> FindAll()
+        public List<BookVO> FindAll()
         {
             return _converter.ParseList(_repository.FindAll());
         }

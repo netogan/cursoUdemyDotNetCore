@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestAppUdemy.Business;
 using RestAppUdemy.Data.VO;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace RestAppUdemy.Controllers
 {
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
+    [Authorize("Bearer")]
     public class PersonsController : ControllerBase
     {
         private IPersonBusiness _personBusiness;
@@ -20,12 +22,12 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpGet]
-        [TypeFilter(typeof(HyperMediaFilter))]
+        //[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(List<PersonVO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             var res = _personBusiness.FindAll();
 
@@ -33,12 +35,12 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpGet("{id}")]
-        [TypeFilter(typeof(HyperMediaFilter))]
+        //[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(PersonVO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> GetById(long id)
+        public IActionResult GetById(long id)
         {
             var person = _personBusiness.FindById(id);
 
@@ -49,11 +51,11 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpPost]
-        //[TypeFilter(typeof(HyperMediaFilter))]
+        ////[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(PersonVO), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> Post([FromBody] PersonVO person)
+        public IActionResult Post([FromBody] PersonVO person)
         {
             if (person == null)
                 return BadRequest();
@@ -64,11 +66,29 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpPut("{id}")]
-        //[TypeFilter(typeof(HyperMediaFilter))]
+        ////[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(PersonVO), (int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> Put([FromBody] PersonVO person)
+        public IActionResult Put([FromBody] PersonVO person)
+        {
+            if (person == null)
+                return BadRequest();
+
+            var personUpdate = _personBusiness.Update(person);
+
+            if (personUpdate == null)
+                return NoContent();
+
+            return new ObjectResult(personUpdate);
+        }
+
+        [HttpPatch("{id}")]
+        ////[TypeFilter(typeof(HyperMediaFilter))]
+        [ProducesResponseType(typeof(PersonVO), (int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public IActionResult Patch([FromBody] PersonVO person)
         {
             if (person == null)
                 return BadRequest();
@@ -82,7 +102,7 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[TypeFilter(typeof(HyperMediaFilter))]
+        ////[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]

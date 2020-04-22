@@ -4,7 +4,7 @@ using RestAppUdemy.Model;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RestAppUdemy.Data.Coonverters
+namespace RestAppUdemy.Data.Converters
 {
     public class PersonConverter : IParser<PersonVO, Person>, IParser<Person, PersonVO>
     {

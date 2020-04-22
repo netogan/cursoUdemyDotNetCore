@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestAppUdemy.Business;
 using RestAppUdemy.Data.VO;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace RestAppUdemy.Controllers
 {
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
+    [Authorize("Bearer")]
     public class BooksController : ControllerBase
     {
         private IBookBusiness _booksBusiness;
@@ -20,25 +22,25 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpGet]
-        [TypeFilter(typeof(HyperMediaFilter))]
+        //[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(List<BookVO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            var res = await _booksBusiness.FindAll();
+            var res = _booksBusiness.FindAll();
 
             return Ok(res);
         }
 
         [HttpGet("{id}", Name = nameof(GetById))]
-        [TypeFilter(typeof(HyperMediaFilter))]
+        //[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(List<BookVO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> GetById(long id)
+        public IActionResult GetById(long id)
         {
             var book = _booksBusiness.FindById(id);
 
@@ -49,11 +51,11 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpPost]
-        [TypeFilter(typeof(HyperMediaFilter))]
+        //[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(BookVO), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> Post([FromBody] BookVO book)
+        public IActionResult Post([FromBody] BookVO book)
         {
             if (book == null)
                 return BadRequest();
@@ -62,11 +64,11 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpPut("{id}")]
-        [TypeFilter(typeof(HyperMediaFilter))]
+        //[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(BookVO), (int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> Put([FromBody] BookVO book)
+        public IActionResult Put([FromBody] BookVO book)
         {
             if (book == null)
                 return BadRequest();
@@ -80,11 +82,11 @@ namespace RestAppUdemy.Controllers
         }
 
         [HttpDelete("{id}")]
-        [TypeFilter(typeof(HyperMediaFilter))]
+        //[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> Delete(long id)
+        public IActionResult Delete(long id)
         {
             _booksBusiness.Delete(id);
 
