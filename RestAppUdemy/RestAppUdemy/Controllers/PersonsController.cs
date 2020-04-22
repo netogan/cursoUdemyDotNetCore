@@ -34,6 +34,32 @@ namespace RestAppUdemy.Controllers
             return Ok(res);
         }
 
+        [HttpGet("find-by-name")]
+        //[TypeFilter(typeof(HyperMediaFilter))]
+        [ProducesResponseType(typeof(List<PersonVO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public IActionResult GetByName([FromQuery] string firstName, [FromQuery] string lastName)
+        {
+            var res = _personBusiness.FindByName(firstName, lastName);
+
+            return Ok(res);
+        }
+
+        [HttpGet("find-with-page-search/{sortDirection}/{pageSize}/{page}")]
+        //[TypeFilter(typeof(HyperMediaFilter))]
+        [ProducesResponseType(typeof(List<PersonVO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public IActionResult GetPagedSearch([FromQuery] string name, string sortDirection, int pageSize, int page)
+        {
+            var res = _personBusiness.FindWithPagedSearch(name, sortDirection, pageSize, page);
+
+            return new ObjectResult(res);
+        }
+
         [HttpGet("{id}")]
         //[TypeFilter(typeof(HyperMediaFilter))]
         [ProducesResponseType(typeof(PersonVO), (int)HttpStatusCode.OK)]
