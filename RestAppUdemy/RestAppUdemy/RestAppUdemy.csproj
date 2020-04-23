@@ -17,6 +17,10 @@
     <PackageReference Include="Tapioca.HATEOAS" Version="1.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Other\" />
+  </ItemGroup>
+
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
       <ReferencePath Condition="'%(FileName)' == 'MySqlConnector'">
