@@ -9,8 +9,13 @@ namespace RestAppUdemy.Model.Context
 
         }
 
-        public MySQLContext(DbContextOptions<MySQLContext> options) : base(options)
+        public MySQLContext(DbContextOptions<MySQLContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().ToTable("users");
+            modelBuilder.Entity<Person>().ToTable("persons");
+            modelBuilder.Entity<Book>().ToTable("books");
         }
 
         public DbSet<Person> Persons { get; set; }
