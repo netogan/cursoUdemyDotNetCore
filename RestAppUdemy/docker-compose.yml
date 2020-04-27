@@ -15,10 +15,6 @@ services:
       MYSQL_USER: docker
       MYSQL_PASSWORD: docker
       MYSQL_DATABASE: rest_with_asp_net_udemy
-    volumes:
-      - type: bind
-        source: ./DBBackup/backup.sql
-        target: /docker-entrypoint-initdb.d/backup.sql  #copia o backup criado
     ports:
       - "3308:3306"
     networks:
@@ -29,7 +25,6 @@ services:
     build:
       context: .
       dockerfile: RestAppUdemy/Dockerfile
-    
     environment:
       TZ: America/Sao_Paulo
       ASPNETCORE_ENVIRONMENT: Production
